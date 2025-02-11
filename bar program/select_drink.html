@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .drink-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        max-width: 400px;
+        margin: auto;
+        text-align: center;
+        }
+
+        .drink-container button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .drink-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select a Drink</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <main>
+        <h1 style="text-align: center;">Select a Drink</h1>
+        <div class="drink-container">
+            <button onclick="selectDrink('Mojito')">Mojito</button>
+            <button onclick="selectDrink('Old Fashioned')">Old Fashioned</button>
+            <button onclick="selectDrink('Martini')">Martini</button>
+            <button onclick="selectDrink('Whiskey Sour')">Whiskey Sour</button>
+            <button onclick="selectDrink('Margarita')">Margarita</button>
+            <button onclick="selectDrink('Cosmopolitan')">Cosmopolitan</button>
+            <button onclick="selectDrink('Manhattan')">Manhattan</button>
+            <button onclick="selectDrink('Daiquiri')">Daiquiri</button>
+            <button onclick="selectDrink('Pina Colada')">Pina Colada</button>
+            <button onclick="selectDrink('Gin & Tonic')">Gin & Tonic</button>
+            <button onclick="selectDrink('Adios Motherf*cker')">Adios Motherf*cker</button>
+            <button onclick="selectDrink('Tokyo Tea')">Tokyo Tea</button>
+            <button onclick="selectDrink('Mango Tango')">Mango Tango</button>
+            <button onclick="selectDrink('Dirty Shirley')">Dirty Shirley</button>
+
+
+        </div>
+
+        <button onclick="goBack()" class="back-button">Back</button>
+
+        <script>
+            function selectDrink(drink) {
+                localStorage.setItem("selectedDrink", drink);
+                window.location.href = "manual.html";
+            }
+
+            function goBack() {
+                window.location.href = "manual.html";
+            }
+        </script>
+    </main>
+</body>
+</html>

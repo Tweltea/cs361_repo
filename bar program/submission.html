@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Page</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <header>
+        <div class="nav-bar">
+            <nav>
+                <a href="index.html">HOME</a>
+                <a href="randomizer.html">Full Randomizer</a>
+                <a href="semirandom.html">Semi-Random</a>
+                <a href="manual.html">Manual-Selection</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Submission Confirmation</h1>
+        <h2 id="barSelection">Bar: </h2>
+        <h2 id="drinkSelection">Drink: <h2>
+        <h2 id="timeSelection">Time: </h2>
+        <h3>Thank you for being an alcoholic! If I don't fill out the page with at least some sentences, then it will look SUPER UGLY. Maybe I will see you
+            at the bar!? And if you are under 21, then you better have a good fake ID ^_^! IM JUST KIDDING; PLEASE DON'T FLAG ME OREGON STATE UNIVERSITY!
+        </h3>    
+
+        <div class="submission-row">
+        <button onclick="goBack()">Back to Randomizer</button>
+        </div>
+    </main>
+
+    <script>
+        function loadSelections() {
+            document.getElementById("barSelection").textContent = "Bar: " + (localStorage.getItem("selectedBar") || "None");
+            document.getElementById("drinkSelection").textContent = "Drink: " + (localStorage.getItem("selectedDrink") || "None");
+            document.getElementById("timeSelection").textContent = "Time: " + (localStorage.getItem("selectedTime") || "None");
+        }
+
+        function goBack() {
+            window.location.href = "randomizer.html";
+            window.location.href = "semirandom.html";
+            window.location.href = "manual.html";
+        }
+
+        
+
+        // Load selections when the page loads
+        window.onload = loadSelections;
+    </script>
+</body>
+</html>

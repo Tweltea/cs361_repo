@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Manual Selection</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <header>
+        <div class="nav-bar">
+            <nav>
+                <a href="index.html">HOME</a>
+                <a href="randomizer.html">Full Randomizer</a>
+                <a href="semirandom.html">Semi-Random</a>
+                <a href="manual.html">Manual-Selection</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Manual Selection</h1>
+        <div class="container">
+            <div>
+                <p class="result" id="bar">Bar: None</p>
+                <div class="button-row">
+
+                <button onclick="goToBarSelection()">Select Bar</button>
+            </div>
+            </div>
+
+            <div>
+                <p class="result" id="drink">Drink: None</p>
+                <div class="button-row">
+
+                <button onclick="goToDrinkSelection()">Select Drink</button>
+            </div>
+            </div>
+
+
+            <p class="result" id="time">Time: None</p>
+            <div class="button-row">
+                <button onclick="enableManualTime()">Input a Time</button>
+            </div>
+            <input type="text" id="manualTimeInput" placeholder="Enter time (e.g., 7:30 PM)" oninput="setManualTime()" disabled>
+
+            <div>
+
+            </div>
+            </div>
+
+        </div>
+
+        <button onclick="goBack()" class="back-button">Back to Home</button>
+
+        <button onclick="submissionPage()" class="submission-button">Submit</button>
+
+
+
+
+        <script>
+            function goBack() {
+                window.location.href = "index.html";
+            }
+
+            function goToDrinkSelection() {
+                window.location.href = "select_drink.html";
+            }
+
+            function loadSelections() {
+                document.getElementById("bar").textContent = "Bar: " + (localStorage.getItem("selectedBar") || "None");
+                document.getElementById("drink").textContent = "Drink: " + (localStorage.getItem("selectedDrink") || "None");
+                document.getElementById("time").textContent = "Time: " + (localStorage.getItem("selectedTime") || "None");
+            }
+
+            function goToBarSelection() {
+                window.location.href = "select_bar.html";
+            }       
+
+            function submissionPage() {
+                const selectedBar = document.getElementById("bar").textContent.replace("Bar: ", "");
+                const selectedDrink = document.getElementById("drink").textContent.replace("Drink: ", "");
+                const selectedTime = document.getElementById("time").textContent.replace("Time: ", "");
+                // Store selections in localStorage
+                localStorage.setItem("selectedBar", selectedBar);
+                localStorage.setItem("selectedDrink", selectedDrink);
+                localStorage.setItem("selectedTime", selectedTime);
+
+                // Redirect to submission page
+                window.location.href = "submission.html";
+            }
+
+            function enableManualTime() {
+                document.getElementById("manualTimeInput").disabled = false;
+                document.getElementById("manualTimeInput").focus();
+            }
+
+            function setManualTime() {
+                let input = document.getElementById("manualTimeInput").value.trim();
+                let timeDisplay = document.getElementById("time");
+
+                // Validate time format (e.g., "7:30 PM")
+                let timeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?[pP][mM]$/;
+                
+                if (timeRegex.test(input)) {
+                    timeDisplay.textContent = "Time: " + input.toUpperCase();
+                } else {
+                    timeDisplay.textContent = "Time: Invalid Format";
+                }
+            }
+
+
+            window.onload = loadSelections; 
+        </script>
+    </main>
+</body>
+</html>

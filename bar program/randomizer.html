@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    
+    <!-- In the <head> area, add the <meta> tag to exclude robots, if you don't want them to crawl your site. -->
+    <meta name="robots" content="noindex, nofollow">
+
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+
+</head>
+<body>
+    <header>
+        <div class="nav-bar">
+            <nav>
+                <a href="index.html">HOME</a>
+                <a href="randomizer.html">Full Randomizer</a>
+                <a href="semirandom.html">Semi-Random</a>
+                <a href="manual.html">Manual-Selection</a>
+            </nav>
+        </div>
+    </header>
+    <main> <!-- INSIDE OF HERE, I WANT THREE BUTTONS -->
+
+        <h1>Random Bar, Drink & Time Selector</h1>
+        <div class="container">
+            <div>
+                <p class="result" id="bar">Bar: None</p>
+                <div class="button-row">
+                <button onclick="randomize('bar')">Randomize Bar</button>
+            </div>
+            </div>
+            <div>
+                <p class="result" id="drink">Drink: None</p>
+                <div class="button-row">
+                <button onclick="randomize('drink')">Randomize Drink</button>
+            </div>
+            </div>
+            <div>
+                <p class="result" id="time">Time: None</p>
+                <div class="button-row">
+                <button onclick="randomize('time')">Randomize Time</button>
+            </div>
+            </div>
+        </div>
+        <button onclick="goBack()" class="back-button">Back to Home</button>
+
+        <button onclick="submissionPage()" class="submission-button">Submit</button>
+
+
+        <script>
+            const bars = {
+                "Squirrels Tavern": { open: "12:00 PM", close: "11:00 PM" },
+                "The Brass Monkey": { open: "12:00 PM", close: "11:00 PM" },
+                "The Biere Library": { open: "12:00 PM", close: "9:00 PM" },
+                "The Angry Beaver Bar & Grill": { open: "12:00 PM", close: "10:00 PM" },
+                "The Downward Dog - Campus": { open: "12:00 PM", close: "12:00 AM" }
+            };
+
+            const drinks = ["Mojito", "Old Fashioned", "Martini", "Whiskey Sour", "Margarita", "Adios Motherf*cker", "Tokyo Tea", "Mango Tango", "Dirty Shirley"];
+            let selectedBar = null; // Track selected bar
+
+            function randomize(category) {
+                if (category === 'bar') {
+                    // Select a random bar
+                    selectedBar = Object.keys(bars)[Math.floor(Math.random() * Object.keys(bars).length)];
+                    document.getElementById('bar').textContent = `Bar: ${selectedBar}`;
+                    
+                    // Reset time to "None"
+                    document.getElementById('time').textContent = "Time: None";
+                } 
+                else if (category === 'drink') {
+                    const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
+                    document.getElementById('drink').textContent = `Drink: ${randomDrink}`;
+                } 
+                else if (category === 'time') {
+                    if (!selectedBar) {
+                        alert("Select a bar first!");
+                        return;
+                    }
+
+                    const { open, close } = bars[selectedBar];
+                    const availableTimes = generateAvailableTimes(open, close);
+                    
+                    if (availableTimes.length === 0) {
+                        document.getElementById('time').textContent = "Time: No available times";
+                    } else {
+                        const randomTime = availableTimes[Math.floor(Math.random() * availableTimes.length)];
+                        document.getElementById('time').textContent = `Time: ${randomTime}`;
+                    }
+                }
+            }
+
+            function generateAvailableTimes(open, close) {
+                const times = ["3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM", "1:00 AM"];
+                
+                let startIndex = times.indexOf(open);
+                let endIndex = times.indexOf(close) - 1; // Stop selection an hour before closing
+                
+                return times.slice(startIndex, endIndex + 1);
+            }
+
+            function goBack() {
+                window.location.href = "index.html";
+            }
+
+            function submissionPage() {
+                const selectedBar = document.getElementById("bar").textContent.replace("Bar: ", "");
+                const selectedDrink = document.getElementById("drink").textContent.replace("Drink: ", "");
+                const selectedTime = document.getElementById("time").textContent.replace("Time: ", "");
+
+                // Store selections in localStorage
+                localStorage.setItem("selectedBar", selectedBar);
+                localStorage.setItem("selectedDrink", selectedDrink);
+                localStorage.setItem("selectedTime", selectedTime);
+
+                // Redirect to submission page
+                window.location.href = "submission.html";
+            }
+
+        </script>
+    </main>
+
+</body>
+    <footer>
+        <p>&copy; 2024 Bryce Khut</p>
+    </footer>
+</html>

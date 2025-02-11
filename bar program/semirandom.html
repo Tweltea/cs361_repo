@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semi-Random Selector</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+    <header>
+        <div class="nav-bar">
+            <nav>
+                <a href="index.html">HOME</a>
+                <a href="randomizer.html">Full Randomizer</a>
+                <a href="semirandom.html">Semi-Random</a>
+                <a href="manual.html">Manual-Selection</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h1>Semi-Random Bar, Drink & Time Selector</h1>
+
+        <!-- Bar Selection -->
+        <div class="container">
+            <div>
+                <p class="result" id="bar">Bar: None</p>
+                <div class="button-row">
+                    <button onclick="randomize('bar')">Random Bar</button>
+                    <button onclick="goToBarSelection()">Select Bar</button>
+                </div>
+            </div>
+
+            <!-- Drink Selection -->
+            <div>
+                <p class="result" id="drink">Drink: None</p>
+                <div class="button-row">
+                    <button onclick="randomize('drink')">Random Drink</button>
+                    <button onclick="goToDrinkSelection()">Select Drink</button>
+                </div>
+            </div>
+
+
+            <!-- Time Selection -->
+        <p class="result" id="time">Time: None</p>
+        <div class="button-row">
+            <button onclick="randomize('time')">Random Time</button>
+            <button onclick="enableManualTime()">Input a Time</button>
+        </div>
+        <input type="text" id="manualTimeInput" placeholder="Enter time (e.g., 7:30 PM)" oninput="setManualTime()" disabled>
+
+        <div>
+
+
+        <!-- Navigation Buttons -->
+        <button onclick="goBack()" class="back-button">Back to Home</button>
+        <button onclick="submissionPage()" class="submission-button">Submit</button>
+
+        <script>
+            const bars = {
+                "Squirrels Tavern": { open: "12:00 PM", close: "11:00 PM" },
+                "The Brass Monkey": { open: "12:00 PM", close: "11:00 PM" },
+                "The Biere Library": { open: "12:00 PM", close: "9:00 PM" },
+                "The Angry Beaver Bar & Grill": { open: "12:00 PM", close: "10:00 PM" },
+                "The Downward Dog - Campus": { open: "12:00 PM", close: "12:00 AM" }
+            };
+
+            const drinks = ["Mojito", "Old Fashioned", "Martini", "Whiskey Sour", "Margarita", "Adios Motherf*cker", "Tokyo Tea", "Mango Tango", "Dirty Shirley", "Pina Colada"];
+            let selectedBar = localStorage.getItem("selectedBar") || null;
+
+            function randomize(category) {
+                if (category === 'bar') {
+                    selectedBar = Object.keys(bars)[Math.floor(Math.random() * Object.keys(bars).length)];
+                    document.getElementById('bar').textContent = `Bar: ${selectedBar}`;
+                    localStorage.setItem("selectedBar", selectedBar);
+                    document.getElementById('time').textContent = "Time: None"; // Reset time
+                    localStorage.setItem("selectedTime", "None");
+                } 
+                else if (category === 'drink') {
+                    const randomDrink = drinks[Math.floor(Math.random() * drinks.length)];
+                    document.getElementById('drink').textContent = `Drink: ${randomDrink}`;
+                    localStorage.setItem("selectedDrink", randomDrink);
+                } 
+                else if (category === 'time') {
+                    if (!selectedBar) {
+                        alert("Select a bar first!");
+                        return;
+                    }
+
+                    const { open, close } = bars[selectedBar];
+                    const availableTimes = generateAvailableTimes(open, close);
+                    
+                    if (availableTimes.length === 0) {
+                        document.getElementById('time').textContent = "Time: No available times";
+                    } else {
+                        const randomTime = availableTimes[Math.floor(Math.random() * availableTimes.length)];
+                        document.getElementById('time').textContent = `Time: ${randomTime}`;
+                        localStorage.setItem("selectedTime", randomTime);
+                    }
+                }
+            }
+
+            function generateAvailableTimes(open, close) {
+                const times = ["3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM", "1:00 AM"];
+                
+                let startIndex = times.indexOf(open);
+                let endIndex = times.indexOf(close) - 1; // Stop selection an hour before closing
+                
+                return times.slice(startIndex, endIndex + 1);
+            }
+
+            function enableManualTime() {
+                document.getElementById("manualTimeInput").disabled = false;
+                document.getElementById("manualTimeInput").focus();
+            }
+
+            function setManualTime() {
+                let input = document.getElementById("manualTimeInput").value.trim();
+                let timeDisplay = document.getElementById("time");
+
+                // Validate time format (e.g., "7:30 PM")
+                let timeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?[pP][mM]$/;
+                
+                if (timeRegex.test(input)) {
+                    timeDisplay.textContent = "Time: " + input.toUpperCase();
+                } else {
+                    timeDisplay.textContent = "Time: Invalid Format";
+                }
+            }
+
+            function goToBarSelection() {
+                window.location.href = "select_bar.html";
+            }
+
+            function goToDrinkSelection() {
+                window.location.href = "select_drink.html";
+            }
+
+            function goBack() {
+                window.location.href = "index.html";
+            }
+
+            function submissionPage() {
+                window.location.href = "submission.html";
+            }
+
+            // Load saved selections when returning to page
+            window.onload = function() {
+                if (localStorage.getItem("selectedBar")) {
+                    document.getElementById('bar').textContent = `Bar: ${localStorage.getItem("selectedBar")}`;
+                }
+                if (localStorage.getItem("selectedDrink")) {
+                    document.getElementById('drink').textContent = `Drink: ${localStorage.getItem("selectedDrink")}`;
+                }
+                if (localStorage.getItem("selectedTime")) {
+                    document.getElementById('time').textContent = `Time: ${localStorage.getItem("selectedTime")}`;
+                }
+            };
+        </script>
+    </main>
+</body>
+</html>
